@@ -1,0 +1,33 @@
+﻿# Backend / Java
+target/
+*.class
+*.jar
+*.war
+
+# Frontend / Node
+node_modules/
+dist/
+build/
+.npm/
+
+# Environment / Secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary
+tmp/
+temp/

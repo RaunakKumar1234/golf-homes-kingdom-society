@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Golf Homes & Kingdom — Society Management Prototype</title>
+<style>
+:root{--navy:#132238;--blue:#2563eb;--sky:#eff6ff;--bg:#f6f8fc;--text:#172033;--muted:#667085;--white:#fff;--border:#e7eaf0;--green:#16a34a;--orange:#f59e0b;--red:#dc2626}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text)}
+.app{display:flex;min-height:100vh}.sidebar{width:250px;background:var(--navy);color:#dbe5f5;padding:22px 15px;position:fixed;inset:0 auto 0 0}
+.logo{font-size:21px;font-weight:800;color:white;padding:5px 12px 28px}.logo span{color:#60a5fa}
+.nav{display:grid;gap:5px}.nav button{border:0;background:transparent;color:#b9c7da;text-align:left;padding:12px 14px;border-radius:9px;font-size:14px;cursor:pointer}.nav button.active,.nav button:hover{background:#203554;color:#fff}
+.main{margin-left:250px;width:calc(100% - 250px)}.top{height:70px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:5}.search{border:1px solid var(--border);background:#fafbfc;border-radius:9px;padding:10px 14px;width:290px}.user{display:flex;align-items:center;gap:10px;font-size:13px}.avatar{width:38px;height:38px;border-radius:50%;background:#dbeafe;color:#1d4ed8;display:grid;place-items:center;font-weight:700}
+.content{padding:28px}.page{display:none}.page.active{display:block}.heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}.heading h1{margin:0;font-size:25px}.heading p{margin:5px 0;color:var(--muted);font-size:13px}.btn{border:0;border-radius:8px;padding:10px 15px;font-weight:600;cursor:pointer}.primary{background:var(--blue);color:#fff}.light{background:#eef4ff;color:#1d4ed8}.danger{background:#fee2e2;color:#b91c1c}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px}.metric{font-size:27px;font-weight:800;margin:8px 0}.muted{color:var(--muted);font-size:13px}.icon{width:38px;height:38px;border-radius:9px;background:var(--sky);display:grid;place-items:center;color:var(--blue);font-weight:800}.grid2{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;margin-top:18px}.panel{background:#fff;border:1px solid var(--border);border-radius:12px;padding:19px}.panel h3{margin:0 0 16px;font-size:16px}.list{display:grid;gap:12px}.row{display:flex;justify-content:space-between;gap:15px;padding:11px 0;border-bottom:1px solid #f0f2f5}.row:last-child{border-bottom:0}.badge{font-size:11px;padding:5px 8px;border-radius:20px;font-weight:700}.green{background:#dcfce7;color:#15803d}.yellow{background:#fef3c7;color:#a16207}.blue{background:#dbeafe;color:#1d4ed8}.red{background:#fee2e2;color:#b91c1c}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden}th,td{padding:13px 14px;text-align:left;border-bottom:1px solid #edf0f4;font-size:13px}th{background:#fafbfc;color:#667085;font-size:12px}.actions{display:flex;gap:6px}.searchbar{display:flex;gap:10px;margin-bottom:15px}.searchbar input,.form input,.form select,.form textarea{width:100%;border:1px solid #dfe4eb;border-radius:8px;padding:10px 11px;background:#fff}.searchbar input{max-width:330px}
+.vote-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}.vote-card{border:1px solid var(--border);border-radius:11px;padding:18px;background:#fff}.vote-card h3{margin:0 0 7px}.progress{height:8px;background:#edf0f5;border-radius:10px;overflow:hidden;margin:12px 0}.progress div{height:100%;background:var(--blue)}.option{border:1px solid #e2e6ec;padding:11px;border-radius:8px;margin:8px 0;cursor:pointer}.option.selected{border-color:#2563eb;background:#eff6ff}.modal{display:none;position:fixed;inset:0;background:#0007;z-index:20;align-items:center;justify-content:center}.modal.show{display:flex}.modalbox{background:#fff;border-radius:14px;width:min(520px,92vw);padding:22px}.modalhead{display:flex;justify-content:space-between;align-items:center}.close{border:0;background:#f2f4f7;border-radius:50%;width:30px;height:30px;cursor:pointer}.form{display:grid;gap:12px;margin-top:15px}.form label{font-size:12px;font-weight:700;color:#475467}.toast{position:fixed;right:20px;bottom:20px;background:#132238;color:#fff;padding:12px 16px;border-radius:8px;display:none;z-index:30}
+@media(max-width:900px){.sidebar{width:70px}.logo{font-size:0}.logo span{font-size:20px}.nav button{font-size:0}.nav button:before{content:"•";font-size:20px}.main{margin-left:70px;width:calc(100% - 70px)}.cards{grid-template-columns:repeat(2,1fr)}.grid2,.vote-grid{grid-template-columns:1fr}.search{width:180px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="logo">Society<span>Hub</span></div>
+  <div class="nav">
+    <button class="active" data-page="dashboard">▦ &nbsp; Dashboard</button>
+    <button data-page="residents">♙ &nbsp; Flat Owners</button>
+    <button data-page="voting">✓ &nbsp; Voting & Meetings</button>
+    <button data-page="complaints">⚑ &nbsp; Complaints</button>
+    <button data-page="maintenance">₹ &nbsp; Maintenance</button>
+    <button data-page="notices">▤ &nbsp; Notices</button>
+    <button data-page="visitors">⌂ &nbsp; Visitors</button>
+    <button data-page="assets">▣ &nbsp; Society Assets</button>
+    <button data-page="reports">▥ &nbsp; Reports</button>
+    <button data-page="settings">⚙ &nbsp; Settings</button>
+  </div>
+</aside>
+
+<main class="main">
+<header class="top"><input class="search" placeholder="Search residents, flats, complaints..." oninput="globalSearch(this.value)"><div class="user"><span>Admin / Society Manager</span><div class="avatar">RS</div></div></header>
+<section class="content">
+
+<div id="dashboard" class="page active">
+ <div class="heading"><div><h1>Society Overview</h1><p>Golf Homes & Kingdom • September 2026</p></div><button class="btn primary" onclick="openModal('noticeModal')">+ New Notice</button></div>
+ <div class="cards">
+  <div class="card"><div class="icon">F</div><div class="metric">128</div><div class="muted">Total Flats</div></div>
+  <div class="card"><div class="icon">R</div><div class="metric">116</div><div class="muted">Active Owners</div></div>
+  <div class="card"><div class="icon">₹</div><div class="metric">₹8.42L</div><div class="muted">Maintenance Collected</div></div>
+  <div class="card"><div class="icon">V</div><div class="metric">3</div><div class="muted">Active Votes</div></div>
+ </div>
+ <div class="grid2">
+  <div class="panel"><h3>Recent Activity</h3><div class="list">
+   <div class="row"><div><b>Flat A-204</b><br><span class="muted">Owner profile updated</span></div><span class="badge blue">Today</span></div>
+   <div class="row"><div><b>Parking policy vote</b><br><span class="muted">78 votes received</span></div><span class="badge green">Active</span></div>
+   <div class="row"><div><b>Complaint #CMP-1042</b><br><span class="muted">Lift maintenance issue</span></div><span class="badge yellow">In Progress</span></div>
+   <div class="row"><div><b>Maintenance receipt</b><br><span class="muted">Flat B-302 • ₹4,500</span></div><span class="badge green">Paid</span></div>
+  </div></div>
+  <div class="panel"><h3>Upcoming Meetings</h3><div class="list">
+   <div class="row"><div><b>Monthly General Meeting</b><br><span class="muted">25 Sep 2026 • Club House</span></div><span class="badge blue">25 Sep</span></div>
+   <div class="row"><div><b>Committee Meeting</b><br><span class="muted">28 Sep 2026 • Office</span></div><span class="badge yellow">28 Sep</span></div>
+  </div></div>
+ </div>
+</div>
+
+<div id="residents" class="page">
+ <div class="heading"><div><h1>Flat Owners</h1><p>Manage owner, tenant and flat records.</p></div><button class="btn primary" onclick="openModal('ownerModal')">+ Add Flat Owner</button></div>
+ <div class="searchbar"><input placeholder="Search by name, flat, email or phone..." oninput="filterTable(this.value)"></div>
+ <table id="ownerTable"><thead><tr><th>Flat</th><th>Owner</th><th>Email / Phone</th><th>Type</th><th>Status</th><th>Actions</th></tr></thead><tbody>
+ <tr><td>A-101</td><td>Arun Kumar</td><td>arun@email.com<br>98765 10001</td><td>Owner</td><td><span class="badge green">Active</span></td><td class="actions"><button class="btn light" onclick="editRow(this)">Edit</button><button class="btn danger" onclick="deleteRow(this)">Delete</button></td></tr>
+ <tr><td>A-204</td><td>Neha Sharma</td><td>neha@email.com<br>98765 10002</td><td>Owner</td><td><span class="badge green">Active</span></td><td class="actions"><button class="btn light" onclick="editRow(this)">Edit</button><button class="btn danger" onclick="deleteRow(this)">Delete</button></td></tr>
+ <tr><td>B-302</td><td>Rahul Verma</td><td>rahul@email.com<br>98765 10003</td><td>Owner</td><td><span class="badge green">Active</span></td><td class="actions"><button class="btn light" onclick="editRow(this)">Edit</button><button class="btn danger" onclick="deleteRow(this)">Delete</button></td></tr>
+ <tr><td>C-501</td><td>Priya Singh</td><td>priya@email.com<br>98765 10004</td><td>Tenant</td><td><span class="badge yellow">Pending</span></td><td class="actions"><button class="btn light" onclick="editRow(this)">Edit</button><button class="btn danger" onclick="deleteRow(this)">Delete</button></td></tr>
+ </tbody></table>
+</div>
+
+<div id="voting" class="page">
+ <div class="heading"><div><h1>Voting & Meetings</h1><p>Create secure society polls and track participation.</p></div><button class="btn primary" onclick="openModal('voteModal')">+ Create New Vote</button></div>
+ <div class="vote-grid">
+  <div class="vote-card"><span class="badge green">LIVE</span><h3>Parking Allocation Policy</h3><p class="muted">Ends 24 Sep 2026 • One eligible vote per flat</p><div class="progress"><div style="width:67%"></div></div><small>78 of 116 eligible owners voted</small><br><br><button class="btn light" onclick="showToast('Vote details opened')">View Results</button></div>
+  <div class="vote-card"><span class="badge green">LIVE</span><h3>Lift AMC Renewal</h3><p class="muted">Ends 26 Sep 2026 • Quorum: 60%</p><div class="progress"><div style="width:51%"></div></div><small>59 of 116 eligible owners voted</small><br><br><button class="btn light" onclick="showToast('Vote details opened')">View Results</button></div>
+  <div class="vote-card"><span class="badge blue">SCHEDULED</span><h3>Diwali Event Budget</h3><p class="muted">Starts 1 Oct 2026 • 3 options</p><button class="btn light" onclick="showToast('Scheduled vote')">View</button></div>
+ </div>
+ <div class="panel" style="margin-top:18px"><h3>Secure Voting Rules</h3><div class="list">
+  <div class="row"><span>Eligible voter identity</span><b>Email / Resident ID</b></div>
+  <div class="row"><span>Duplicate vote prevention</span><b>One vote per eligible flat per poll</b></div>
+  <div class="row"><span>Audit record</span><b>Timestamp + voter ID + poll ID</b></div>
+  <div class="row"><span>Admin visibility</span><b>Results visible; individual choices configurable</b></div>
+ </div></div>
+</div>
+
+<div id="complaints" class="page"><div class="heading"><div><h1>Complaints & Service Requests</h1><p>Track issues from submission to resolution.</p></div><button class="btn primary" onclick="showToast('Complaint form opened')">+ New Complaint</button></div><table><thead><tr><th>ID</th><th>Flat</th><th>Issue</th><th>Assigned To</th><th>Status</th><th>Updated</th></tr></thead><tbody><tr><td>CMP-1042</td><td>A-204</td><td>Lift maintenance</td><td>Maintenance Team</td><td><span class="badge yellow">In Progress</span></td><td>Today</td></tr><tr><td>CMP-1041</td><td>B-302</td><td>Water leakage</td><td>Plumber</td><td><span class="badge green">Resolved</span></td><td>Yesterday</td></tr><tr><td>CMP-1040</td><td>C-501</td><td>Street light</td><td>Electrician</td><td><span class="badge red">Open</span></td><td>20 Sep</td></tr></tbody></table></div>
+
+<div id="maintenance" class="page"><div class="heading"><div><h1>Maintenance & Payments</h1><p>Track monthly dues, receipts and outstanding balances.</p></div><button class="btn primary" onclick="showToast('Payment record form opened')">+ Record Payment</button></div><div class="cards"><div class="card"><div class="metric">₹8.42L</div><div class="muted">Collected this month</div></div><div class="card"><div class="metric">₹1.26L</div><div class="muted">Outstanding</div></div><div class="card"><div class="metric">92%</div><div class="muted">Collection rate</div></div><div class="card"><div class="metric">11</div><div class="muted">Pending flats</div></div></div></div>
+
+<div id="notices" class="page"><div class="heading"><div><h1>Notices & Announcements</h1><p>Publish important updates to residents.</p></div><button class="btn primary" onclick="openModal('noticeModal')">+ New Notice</button></div><div class="panel"><div class="row"><div><b>Water supply maintenance</b><br><span class="muted">Scheduled on 23 Sep, 10 AM–2 PM</span></div><span class="badge blue">Published</span></div><div class="row"><div><b>Monthly General Meeting</b><br><span class="muted">Agenda and attendance details</span></div><span class="badge green">Published</span></div></div></div>
+
+<div id="visitors" class="page"><div class="heading"><div><h1>Visitors & Security</h1><p>Visitor log, deliveries and gate activity.</p></div><button class="btn primary" onclick="showToast('Visitor entry form opened')">+ Add Visitor</button></div><table><thead><tr><th>Time</th><th>Visitor</th><th>Flat</th><th>Purpose</th><th>Status</th></tr></thead><tbody><tr><td>10:42 AM</td><td>Amit • Delivery</td><td>A-204</td><td>Courier</td><td><span class="badge green">Inside</span></td></tr><tr><td>09:15 AM</td><td>Rakesh Mehta</td><td>B-302</td><td>Guest</td><td><span class="badge blue">Exited</span></td></tr></tbody></table></div>
+
+<div id="assets" class="page"><div class="heading"><div><h1>Society Assets</h1><p>Manage clubhouse, lifts, pumps, generators and equipment.</p></div><button class="btn primary" onclick="showToast('Asset form opened')">+ Add Asset</button></div><table><thead><tr><th>Asset</th><th>Category</th><th>Last Service</th><th>Next Service</th><th>Status</th></tr></thead><tbody><tr><td>Lift A</td><td>Lift</td><td>01 Aug 2026</td><td>01 Nov 2026</td><td><span class="badge green">Operational</span></td></tr><tr><td>DG Generator</td><td>Power</td><td>15 Jul 2026</td><td>15 Oct 2026</td><td><span class="badge green">Operational</span></td></tr></tbody></table></div>
+
+<div id="reports" class="page"><div class="heading"><div><h1>Reports</h1><p>Society operations and governance reports.</p></div><button class="btn primary" onclick="showToast('Report generated')">Generate Report</button></div><div class="cards"><div class="card"><b>Resident Directory</b><p class="muted">Owner and flat details</p></div><div class="card"><b>Maintenance Report</b><p class="muted">Collections and dues</p></div><div class="card"><b>Voting Audit</b><p class="muted">Participation and poll history</p></div><div class="card"><b>Complaint Report</b><p class="muted">Issue resolution metrics</p></div></div></div>
+
+<div id="settings" class="page"><div class="heading"><div><h1>Settings</h1><p>Society profile, roles, permissions and notification preferences.</p></div></div><div class="panel"><div class="row"><span>Society name</span><b>Golf Homes & Kingdom</b></div><div class="row"><span>Admin roles</span><b>Super Admin • Manager • Committee Member</b></div><div class="row"><span>Notifications</span><b>Email • SMS • In-app</b></div><div class="row"><span>Voting security</span><b>Resident verification + duplicate prevention</b></div></div></div>
+
+</section></main></div>
+
+<div id="ownerModal" class="modal"><div class="modalbox"><div class="modalhead"><h3>Add Flat Owner</h3><button class="close" onclick="closeModal('ownerModal')">×</button></div><div class="form"><label>Flat Number<input id="flat" placeholder="e.g. A-105"></label><label>Owner Name<input id="owner" placeholder="Full name"></label><label>Email<input id="email" type="email" placeholder="owner@email.com"></label><label>Phone<input id="phone" placeholder="10-digit mobile"></label><label>Resident Type<select id="type"><option>Owner</option><option>Tenant</option><option>Family Member</option></select></label><button class="btn primary" onclick="addOwner()">Save Owner</button></div></div></div>
+
+<div id="voteModal" class="modal"><div class="modalbox"><div class="modalhead"><h3>Create Society Vote</h3><button class="close" onclick="closeModal('voteModal')">×</button></div><div class="form"><label>Question<input placeholder="e.g. Should parking policy be revised?"></label><label>Option 1<input placeholder="Yes / Option A"></label><label>Option 2<input placeholder="No / Option B"></label><label>End Date<input type="date"></label><label>Eligibility<select><option>One verified vote per flat</option><option>One verified vote per resident</option></select></label><button class="btn primary" onclick="closeModal('voteModal');showToast('Vote created successfully')">Create Vote</button></div></div></div>
+
+<div id="noticeModal" class="modal"><div class="modalbox"><div class="modalhead"><h3>New Notice</h3><button class="close" onclick="closeModal('noticeModal')">×</button></div><div class="form"><label>Title<input placeholder="Notice title"></label><label>Message<textarea rows="4" placeholder="Write announcement..."></textarea></label><label>Publish To<select><option>All Residents</option><option>Committee Members</option></select></label><button class="btn primary" onclick="closeModal('noticeModal');showToast('Notice published')">Publish Notice</button></div></div></div>
+<div class="toast" id="toast"></div>
+<script>
+const buttons=document.querySelectorAll('.nav button');
+buttons.forEach(b=>b.onclick=()=>{buttons.forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(b.dataset.page).classList.add('active')});
+function openModal(id){document.getElementById(id).classList.add('show')}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',2200)}
+function addOwner(){const f=document.getElementById('flat').value.trim(),o=document.getElementById('owner').value.trim(),e=document.getElementById('email').value.trim(),p=document.getElementById('phone').value.trim(),ty=document.getElementById('type').value;if(!f||!o||!e){showToast('Please enter flat, owner and email');return}document.querySelector('#ownerTable tbody').insertAdjacentHTML('beforeend',`<tr><td>${f}</td><td>${o}</td><td>${e}<br>${p}</td><td>${ty}</td><td><span class="badge green">Active</span></td><td class="actions"><button class="btn light" onclick="editRow(this)">Edit</button><button class="btn danger" onclick="deleteRow(this)">Delete</button></td></tr>`);closeModal('ownerModal');showToast('Flat owner added successfully')}
+function deleteRow(btn){if(confirm('Delete this resident record?')){btn.closest('tr').remove();showToast('Resident removed')}}
+function editRow(btn){showToast('Edit form would open here')}
+function filterTable(q){q=q.toLowerCase();document.querySelectorAll('#ownerTable tbody tr').forEach(r=>r.style.display=r.innerText.toLowerCase().includes(q)?'':'none')}
+function globalSearch(q){if(q.length>2){showToast('Search: '+q)}}
+</script>
+</body></html>
