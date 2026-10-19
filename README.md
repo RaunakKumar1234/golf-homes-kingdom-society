@@ -20,5 +20,51 @@ npm run dev
 
 Frontend: http://localhost:5173 | Backend: http://localhost:8080
 
-## Production security to add before deployment
-JWT/session authentication, BCrypt password hashing, role-based authorization, OTP/email verification, CSRF/CORS hardening, audit log, scheduled poll auto-start/auto-close, immutable vote audit, backups and HTTPS.
+
+# Golf Homes & Kingdom — Society Management System
+
+A full-stack society management application designed to
+manage residents, committee activities, voting, complaints,
+expenses, notices, meetings, and reports.
+
+## Technology Stack
+
+- Java 17
+- Spring Boot 3
+- React + Vite
+- MySQL 8
+
+## Key Features
+
+- Admin dashboard and resident accounts
+- Committee and special member management
+- Planned, live, and closed voting
+- One vote per flat validation
+- Complaints and expense management
+- Notices and meeting management
+- Reports and application settings
+
+## Screenshots
+
+### Admin Dashboard
+![Admin Dashboard](frontend/public/images/admin-dashboard.png)
+
+### Resident Dashboard
+![Resident Dashboard](frontend/public/images/resident-dashboard.png)
+
+### Voting System
+![Voting System](frontend/public/images/voting-system.png)
+
+## Project Structure
+
+- `backend/` — Spring Boot REST APIs
+- `frontend/` — React user interface
+
+## Author
+
+Raunak Kumar
+
+## GitHub Repository
+
+https://github.com/RaunakKumar1234/golf-homes-kingdom-society
+
